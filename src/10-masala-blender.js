@@ -54,28 +54,70 @@
  */
 export function pipe(...fns) {
   // Your code here
+  if (fns.length === 0) {
+    return (x) => x;
+  }
+
+  const leftToRightFn = (input) => {
+    const result = fns.reduce((acc, fn) => fn(acc), input);
+    console.log(result);
+    return result;
+  };
+  return leftToRightFn;
 }
 
 export function compose(...fns) {
   // Your code here
+  if (fns.length === 0) {
+    return (x) => x;
+  }
+  const rightToLeftFn = (input) => {
+    const result = fns.reduceRight((acc, fn) => fn(acc), input);
+    console.log(result);
+    return result;
+  };
+  return rightToLeftFn;
 }
 
 export function grind(spice) {
   // Your code here
+  return { ...spice, form: "powder" };
 }
 
 export function roast(spice) {
   // Your code here
+  return { ...spice, roasted: true, aroma: "strong" };
 }
 
 export function mix(spice) {
   // Your code here
+  return { ...spice, mixed: true };
 }
 
 export function pack(spice) {
   // Your code here
+  return { ...spice, packed: true, label: `${spice.name} Masala` };
 }
 
 export function createRecipe(steps) {
-  // Your code here
+  if (!Array.isArray(steps) || steps.length === 0) {
+    return (x) => x;
+  }
+
+  const stepMap = {
+    grind,
+    roast,
+    mix,
+    pack,
+  };
+
+  const validFunctions = steps
+    .filter((step) => stepMap[step]) // keep only known steps
+    .map((step) => stepMap[step]); // convert to functions
+
+  if (validFunctions.length === 0) {
+    return (x) => x;
+  }
+
+  return pipe(...validFunctions);
 }

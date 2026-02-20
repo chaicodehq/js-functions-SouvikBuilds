@@ -46,12 +46,87 @@
  */
 export function createDialogueWriter(genre) {
   // Your code here
+  const genreChart = ["action", "romance", "comedy", "drama"];
+  if (!genreChart.includes(genre.trim().toLowerCase())) {
+    console.log(null);
+    return null;
+  }
+  const writer = (hero, villain) => {
+    if (
+      !hero ||
+      hero.trim().length === 0 ||
+      !villain ||
+      villain.trim().length === 0
+    ) {
+      return "...";
+    }
+
+    if (genre.trim().toLowerCase() === "action") {
+      console.log(`${hero} says: 'Tujhe toh main dekh lunga, ${villain}!'`);
+      return `${hero} says: 'Tujhe toh main dekh lunga, ${villain}!'`;
+    } else if (genre.trim().toLowerCase() === "romance") {
+      console.log(`${hero} whispers: '${villain}, tum mere liye sab kuch ho'`);
+      return `${hero} whispers: '${villain}, tum mere liye sab kuch ho'`;
+    } else if (genre.trim().toLowerCase() === "comedy") {
+      console.log(`${hero} laughs: '${villain} bhai, kya kar rahe ho yaar!'`);
+      return `${hero} laughs: '${villain} bhai, kya kar rahe ho yaar!'`;
+    } else if (genre.trim().toLowerCase() === "drama") {
+      console.log(
+        `${hero} cries: '${villain}, tune mera sab kuch cheen liya!'`,
+      );
+      return `${hero} cries: '${villain}, tune mera sab kuch cheen liya!'`;
+    }
+  };
+  return writer;
 }
 
 export function createTicketPricer(basePrice) {
   // Your code here
+  if (typeof basePrice !== "number" || basePrice <= 0) {
+    console.log(null);
+    return null;
+  }
+
+  const createTicket = (seatType, isWeekend = false) => {
+    const seatChart = {
+      silver: 1,
+      gold: 1.5,
+      platinum: 2,
+    };
+    if (!seatType || typeof seatType !== "string" || !(seatType in seatChart)) {
+      console.log(null);
+      return null;
+    }
+    const multiplier = seatChart[seatType.trim().toLowerCase()];
+    let price = basePrice * multiplier;
+    if (isWeekend) {
+      price = price * 1.3;
+    }
+    const finalPrice = Math.round(price);
+    console.log(finalPrice);
+    return finalPrice;
+  };
+  return createTicket;
 }
 
 export function createRatingCalculator(weights) {
   // Your code here
+  if (!weights || typeof weights !== "object") {
+    console.log(null);
+    return null;
+  }
+  const calculator = (scores) => {
+    let total = 0;
+    let count = 0;
+
+    for (const key in weights) {
+      if (scores[key] !== undefined) {
+        total += scores[key] * weights[key];
+        count++;
+      }
+    }
+    console.log(Number(total.toFixed(1)));
+    return Number(total.toFixed(1));
+  };
+  return calculator;
 }

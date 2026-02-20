@@ -46,16 +46,95 @@
  */
 export function createFilter(field, operator, value) {
   // Your code here
+
+  const operatorChart = [">", "<", ">=", "<=", "==="];
+  if (!operatorChart.includes(operator.toString())) {
+    const falseReturn = () => {
+      return false;
+    };
+    return falseReturn;
+  }
+
+  const filterFn = (obj) => {
+    if (field in obj) {
+      if (operator === ">") {
+        return obj[field] > value;
+      } else if (operator === "<") {
+        return obj[field] < value;
+      } else if (operator === ">=") {
+        return obj[field] >= value;
+      } else if (operator === "<=") {
+        return obj[field] <= value;
+      } else if (operator === "===") {
+        return obj[field] === value;
+      }
+    }
+  };
+  return filterFn;
 }
 
 export function createSorter(field, order = "asc") {
   // Your code here
+  const byRating = (a, b) => {
+    const valueA = a[field];
+    const valueB = b[field];
+
+    if (typeof valueA === "string" && typeof valueB === "string") {
+      if (order === "asc") {
+        return valueA.localeCompare(valueB);
+      } else {
+        return valueB.localeCompare(valueA);
+      }
+    }
+    if (order === "asc") {
+      return valueA - valueB;
+    } else {
+      return valueB - valueA;
+    }
+  };
+
+  return byRating;
 }
 
 export function createMapper(fields) {
   // Your code here
+  if (!Array.isArray(fields) || fields.length === 0) {
+    console.log(null);
+    return null;
+  }
+
+  const mapper = (obj) => {
+    if (typeof obj !== "object" || obj === null) {
+      console.log(null);
+      return null;
+    }
+    const newObj = {};
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i];
+      if (field in obj) {
+        newObj[field] = obj[field];
+      }
+    }
+    console.log(newObj);
+    return newObj;
+  };
+  return mapper;
 }
 
 export function applyOperations(data, ...operations) {
   // Your code here
+  if (!Array.isArray(data)) {
+    console.log([]);
+    return [];
+  }
+  let result = data;
+  for (let i = 0; i < operations.length; i++) {
+    const operation = operations[i];
+    if (typeof operation !== "function") {
+      return false;
+    }
+    result = operation(result);
+  }
+  console.log(result);
+  return result;
 }

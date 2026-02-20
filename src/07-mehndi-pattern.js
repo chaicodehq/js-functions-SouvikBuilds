@@ -54,20 +54,97 @@
  */
 export function repeatChar(char, n) {
   // Your code here
+  if (
+    typeof char !== "string" ||
+    char.trim().length === 0 ||
+    typeof n !== "number" ||
+    n <= 0
+  ) {
+    console.log("");
+    return "";
+  }
+  if (n === 1) {
+    return char;
+  }
+  return char + repeatChar(char, n - 1);
 }
 
 export function sumNestedArray(arr) {
   // Your code here
+  if (!Array.isArray(arr)) {
+    console.log(0);
+    return 0;
+  }
+  let sum = 0;
+
+  for (let i = 0; i < arr.length; i++) {
+    const element = arr[i];
+
+    if (typeof element === "number" && !isNaN(element)) {
+      sum += element;
+    } else if (Array.isArray(element)) {
+      sum += sumNestedArray(element);
+    }
+  }
+  console.log(sum);
+  return sum;
 }
 
 export function flattenArray(arr) {
   // Your code here
+  if (!Array.isArray(arr)) {
+    console.log([]);
+    return [];
+  }
+  let result = [];
+  for (let i = 0; i < arr.length; i++) {
+    const element = arr[i];
+    if (Array.isArray(element)) {
+      result = result.concat(flattenArray(element));
+    } else {
+      result.push(element);
+    }
+  }
+  console.log(result);
+  return result;
 }
 
 export function isPalindrome(str) {
   // Your code here
+  if (typeof str !== "string") {
+    console.log(false);
+    return false;
+  }
+  str = str.toLowerCase();
+  if (str.trim().length <= 1) {
+    return true;
+  }
+  if (str.charAt(0) !== str.charAt(str.length - 1)) {
+    return false;
+  }
+  return isPalindrome(str.slice(1, -1));
 }
 
 export function generatePattern(n) {
   // Your code here
+  if (typeof n !== "number" || n <= 0 || !Number.isInteger(n)) {
+    console.log([]);
+    return [];
+  }
+
+  const buildAscending = (num) => {
+    if (num === 1) {
+      return ["*"];
+    }
+
+    const previous = buildAscending(num - 1);
+    const currentLine = "*".repeat(num);
+
+    return [...previous, currentLine];
+  };
+
+  const ascending = buildAscending(n);
+
+  const descending = ascending.slice(0, -1).reverse();
+  return [...ascending, ...descending];
 }

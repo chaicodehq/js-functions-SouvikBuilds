@@ -33,4 +33,43 @@
  */
 export function calculateDosaOrder(type, quantity = 1, isSpicy = false) {
   // Your code here
+  if (typeof type !== "string") {
+    console.log(null);
+    return null;
+  }
+  if (typeof quantity !== "number" || quantity <= 0 || isNaN(quantity)) {
+    console.log(null);
+    return null;
+  }
+
+  const priceChart = {
+    plain: 40,
+    masala: 60,
+    onion: 50,
+    butter: 70,
+    paper: 90,
+    cheese: 80,
+  };
+
+  const normalisedType = type.trim().toLowerCase();
+  if (!(normalisedType in priceChart)) {
+    console.log(null);
+    return null;
+  }
+  const basePrice = priceChart[normalisedType];
+  const pricePerDosa = isSpicy ? basePrice + 10 : basePrice;
+  const total = pricePerDosa * quantity;
+
+  console.table({
+    type: normalisedType,
+    quantity: quantity,
+    pricePerDosa: pricePerDosa,
+    total: total,
+  });
+  return {
+    type: normalisedType,
+    quantity: quantity,
+    pricePerDosa: pricePerDosa,
+    total: total,
+  };
 }
